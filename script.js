@@ -2,7 +2,9 @@
 const SUPABASE_URL = "https://jubiilhzffyrpmkxtmwk.supabase.co"; // Deine Supabase-URL
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1YmlpbGh6ZmZ5cnBta3h0bXdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MTk4NDgsImV4cCI6MjA3ODM5NTg0OH0.MP4jIu9-VCyDhGYXfMHVJab3NmtzkTkNiy5xZq8sCC8";        // Dein Anon Key
 // ===============================
-              // <--- ersetzen
+// Supabase Setup
+// ===============================
+               // <--- ersetzen
 
 const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -13,17 +15,25 @@ let currentIndex = 0;
 let dealsData = [];
 
 // ===============================
-// Funktion: Deals laden
+// Funktion: Deals laden (nur aktuelle)
 // ===============================
 async function loadDeals() {
+  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
   const { data, error } = await supabase
     .from('deals')
     .select('*')
+    .gte('valid_until', today)   // Nur gültige Deals
     .order('restaurant', { ascending: true });
 
   if (error) {
-    console.error("Fehler beim Laden der Deals:", error);
-    document.getElementById('slider').innerHTML = "<p>Fehler beim Laden der Deals.</p>";
+    console.error("Supabase Error:", error);
+    document.getElementById('slider').innerHTML = `<p>Fehler: ${error.message}</p>`;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    document.getElementById('slider').innerHTML = "<p>Keine aktuellen Deals gefunden.</p>";
     return;
   }
 
@@ -83,6 +93,7 @@ function prevSlide() {
 // Auto-Slide alle 5 Sekunden
 // ===============================
 setInterval(() => {
+  if (dealsData.length === 0) return;
   if (currentIndex < dealsData.length - Math.floor(800/270)) {
     currentIndex++;
   } else {
