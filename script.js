@@ -1,10 +1,19 @@
 // ==== Supabase Setup ====
 const SUPABASE_URL = "https://jubiilhzffyrpmkxtmwk.supabase.co"; // Deine Supabase-URL
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1YmlpbGh6ZmZ5cnBta3h0bXdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MTk4NDgsImV4cCI6MjA3ODM5NTg0OH0.MP4jIu9-VCyDhGYXfMHVJab3NmtzkTkNiy5xZq8sCC8";        // Dein Anon Key
+// ===============================
+              // <--- ersetzen
+
 const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ===============================
-// Funktion zum Laden der Deals
+// Slider Variablen
+// ===============================
+let currentIndex = 0;
+let dealsData = [];
+
+// ===============================
+// Funktion: Deals laden
 // ===============================
 async function loadDeals() {
   const { data, error } = await supabase
@@ -14,14 +23,22 @@ async function loadDeals() {
 
   if (error) {
     console.error("Fehler beim Laden der Deals:", error);
-    document.getElementById('deals-container').innerHTML = "<p>Fehler beim Laden der Deals.</p>";
+    document.getElementById('slider').innerHTML = "<p>Fehler beim Laden der Deals.</p>";
     return;
   }
 
-  const container = document.getElementById('deals-container');
-  container.innerHTML = "";
+  dealsData = data;
+  renderSlider();
+}
 
-  data.forEach(deal => {
+// ===============================
+// Funktion: Slider rendern
+// ===============================
+function renderSlider() {
+  const slider = document.getElementById('slider');
+  slider.innerHTML = "";
+
+  dealsData.forEach(deal => {
     const card = document.createElement('div');
     card.className = "deal-card";
     card.innerHTML = `
@@ -30,9 +47,49 @@ async function loadDeals() {
       <p>${deal.description || ''}</p>
       <small>Restaurant: ${deal.restaurant}</small>
     `;
-    container.appendChild(card);
+    slider.appendChild(card);
   });
+
+  updateSliderPosition();
 }
+
+// ===============================
+// Funktion: Slider Position
+// ===============================
+function updateSliderPosition() {
+  const slider = document.getElementById('slider');
+  const offset = -currentIndex * 270; // Kartenbreite + margin
+  slider.style.transform = `translateX(${offset}px)`;
+}
+
+// ===============================
+// Navigation
+// ===============================
+function nextSlide() {
+  if (currentIndex < dealsData.length - Math.floor(800/270)) {
+    currentIndex++;
+    updateSliderPosition();
+  }
+}
+
+function prevSlide() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    updateSliderPosition();
+  }
+}
+
+// ===============================
+// Auto-Slide alle 5 Sekunden
+// ===============================
+setInterval(() => {
+  if (currentIndex < dealsData.length - Math.floor(800/270)) {
+    currentIndex++;
+  } else {
+    currentIndex = 0;
+  }
+  updateSliderPosition();
+}, 5000);
 
 // ===============================
 // Seite laden

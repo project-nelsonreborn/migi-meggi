@@ -1,89 +1,67 @@
 body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(180deg, #fafafa, #eaeaea);
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  text-align: center;
   margin: 0;
-  color: #333;
+  padding: 0;
 }
 
-header {
-  background: #222;
-  color: white;
-  text-align: center;
-  padding: 20px;
+h1 {
+  background-color: #ffcc00;
+  padding: 20px 0;
+  margin: 0;
 }
 
-header p {
-  color: #bbb;
-  margin-top: 5px;
-}
-
-section {
-  max-width: 900px;
-  margin: 40px auto;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-  text-align: center;
+.slider-container {
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  margin: 30px auto;
+  overflow: hidden;
 }
 
 .slider {
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-.slides {
   display: flex;
-  transition: transform 0.6s ease;
+  transition: transform 0.5s ease-in-out;
 }
 
-.slide {
-  min-width: 100%;
-  text-align: center;
-}
-
-.slide img {
-  width: 80%;
-  max-width: 350px;
+.deal-card {
+  min-width: 250px;
+  margin: 10px;
+  background-color: #fff;
   border-radius: 10px;
-  margin-bottom: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  flex-shrink: 0;
 }
 
-.controls {
-  text-align: center;
-  margin-top: 10px;
+.deal-card img {
+  width: 100%;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
-.controls button {
+.deal-card h3 {
+  margin: 10px 0 5px;
+}
+
+.deal-card p {
+  margin: 0 10px 10px;
+  font-size: 0.9rem;
+}
+
+.prev, .next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255,255,255,0.8);
   border: none;
-  background: #333;
-  color: #fff;
-  padding: 8px 14px;
-  border-radius: 6px;
+  font-size: 2rem;
+  padding: 5px 10px;
   cursor: pointer;
-  margin: 0 5px;
-  transition: background 0.3s;
+  border-radius: 5px;
 }
 
-.controls button:hover {
-  background: #555;
-}
+.prev { left: 0; }
+.next { right: 0; }
 
-.loading {
-  text-align: center;
-  font-size: 1.1em;
-  color: #555;
-  margin-top: 50px;
-}
-
-footer {
-  background: #f1f1f1;
-  color: #666;
-  text-align: center;
-  padding: 20px;
-  margin-top: 40px;
-}
+.prev:hover, .next:hover { background-color: rgba(255,255,255,1); }
